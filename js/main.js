@@ -45,6 +45,12 @@ const MESSAGES = [
 ];
 
 const PHOTOS_COUNT = 25;
+const AVATAR_MIN_COUNT = 1;
+const AVATAR_MAX_COUNT = 6;
+const LIKE_MIN_COUNT = 15;
+const LIKE_MAX_COUNT = 200;
+const COMMENT_COUNT = 30;
+const MESSAGE_MAX_UID = 1000000;
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -71,7 +77,7 @@ function createMessagesUIDsGenerator() {
     let idx;
     let ifUID = false;
     while (!ifUID) {
-      idx = getRandomInteger(0, 100000000);
+      idx = getRandomInteger(0, MESSAGE_MAX_UID);
       ifUID = !generatedUIDs.some((uid) => uid === idx);
     }
     generatedUIDs.push(idx);
@@ -82,7 +88,7 @@ function createMessagesUIDsGenerator() {
 const getCommentUID = createMessagesUIDsGenerator();
 
 function getComment() {
-  const idx = getRandomInteger(1, 6);
+  const idx = getRandomInteger(AVATAR_MIN_COUNT, AVATAR_MAX_COUNT);
   return {
     id: getCommentUID(),
     avatar: `img/avatar-${idx}.svg`,
@@ -91,17 +97,25 @@ function getComment() {
   };
 }
 
-let id = 0;
+function createPhotoGenerator() {
+  let id = 0;
 
-function createPhoto() {
-  id += 1;
-  return {
-    id,
-    url: `photos/${id}.jpg`,
-    description: getRandomArrayElement(DESCRIPTIONS),
-    likes: getRandomInteger(15, 200),
-    comments: Array.from({ length: getRandomInteger(0, 30) }, getComment)
+  return (_id) => {
+    if (!_id) {
+      id += 1;
+      _id = id;
+    }
+
+    return {
+      _id,
+      url: `photos/${_id}.jpg`,
+      description: getRandomArrayElement(DESCRIPTIONS),
+      likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
+      comments: Array.from({ length: getRandomInteger(0, COMMENT_COUNT) }, getComment)
+    };
   };
 }
+
+const createPhoto = createPhotoGenerator();
 
 Array.from({ length: PHOTOS_COUNT }, createPhoto);
