@@ -94,5 +94,6 @@ function createPhotoGenerator() {
 }
 
 const createPhoto = createPhotoGenerator();
+const getPhotosData = () => Array.from({ length: PHOTOS_COUNT }, createPhoto);
 
-export {createPhoto, PHOTOS_COUNT};
+export { getPhotosData };

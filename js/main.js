@@ -1,4 +1,8 @@
 import './util.js';
-import {PHOTOS_COUNT, createPhoto} from './data.js';
+import { getPhotosData } from './data.js';
+import { getRenderedPhotos } from './photosRenderer.js';
 
-Array.from({ length: PHOTOS_COUNT }, createPhoto);
+const photos = getPhotosData();
+const renderedPhotos = getRenderedPhotos(photos);
+
+document.querySelector('.pictures')?.appendChild(renderedPhotos);
