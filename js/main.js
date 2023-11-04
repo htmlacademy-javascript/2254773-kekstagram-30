@@ -5,4 +5,4 @@ import { getRenderedPhotos } from './photosRenderer.js';
 const photos = getPhotosData();
 const renderedPhotos = getRenderedPhotos(photos);
 
-document.querySelector('.pictures')?.appendChild(renderedPhotos);
+document.querySelector('.pictures').appendChild(renderedPhotos);
