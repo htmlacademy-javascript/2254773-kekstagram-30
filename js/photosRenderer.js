@@ -14,6 +14,7 @@ const getRenderedPhotos = (photos) => {
     comments.textContent = photo.comments.length;
     const likes = photoElement.querySelector('.picture__likes');
     likes.textContent = photo.likes;
+    photoElement.dataset.photoId = photo.id;
     pictureFragment.appendChild(photoElement);
   });
 

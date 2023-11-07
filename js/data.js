@@ -83,8 +83,9 @@ function createPhotoGenerator() {
       _id = id;
     }
 
+    _id += '';
     return {
-      _id,
+      id: _id,
       url: `photos/${_id}.jpg`,
       description: getRandomArrayElement(DESCRIPTIONS),
       likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),

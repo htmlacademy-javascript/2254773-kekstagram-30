@@ -24,4 +24,12 @@ function createMessagesUIDsGenerator() {
   };
 }
 
-export {createMessagesUIDsGenerator, getRandomArrayElement, getRandomInteger};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const cleanUpChildren = (htmlElement) => {
+  Array.from(htmlElement.children).forEach((element) => {
+    htmlElement.removeChild(element);
+  });
+};
+
+export { createMessagesUIDsGenerator, getRandomArrayElement, getRandomInteger, isEscapeKey, cleanUpChildren };
