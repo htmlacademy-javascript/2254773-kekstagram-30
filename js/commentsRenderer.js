@@ -1,14 +1,16 @@
+const templateComment = document.querySelector('#comment').content;
+const template = templateComment.querySelector('.social__comment');
+
 const getRenderedComments = (comments) => {
   const fragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
-    const commentContent = `
-    <img src="${comment.avatar}" alt="${comment.name}" class="social__picture" width="35" height="35">
-    <p class="social__text">${comment.message}</p>
-    `;
-    const commentElement = document.createElement('li');
-    commentElement.classList.add('social_comment');
-    commentElement.innerHTML = commentContent;
+    const commentElement = template.cloneNode(true);
+    const img = commentElement.querySelector('.social__picture');
+    const p = commentElement.querySelector('.social__text');
+    img.src = comment.avatar;
+    img.alt = comment.name;
+    p.textContent = comment.message;
 
     fragment.appendChild(commentElement);
   });

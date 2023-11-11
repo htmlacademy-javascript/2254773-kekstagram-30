@@ -12,7 +12,6 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
 const pictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
 
-pictureCancelButton.addEventListener('click', closeClickHandler);
 
 const hideModal = () => {
   bigPicture.classList.add('hidden');
@@ -20,7 +19,8 @@ const hideModal = () => {
   commentsLoader.classList.remove('hidden');
   body.classList.remove('modal-open');
 
-  document.addEventListener('keydown', escapeKeyHandler);
+  document.removeEventListener('keydown', escapeKeyHandler);
+  pictureCancelButton.removeEventListener('click', closeClickHandler);
 };
 
 function escapeKeyHandler(evt) {
@@ -41,6 +41,7 @@ const showModal = () => {
   commentsLoader.classList.add('hidden');
   body.classList.add('modal-open');
 
+  pictureCancelButton.addEventListener('click', closeClickHandler);
   document.addEventListener('keydown', escapeKeyHandler);
 };
 

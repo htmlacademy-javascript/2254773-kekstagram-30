@@ -1,2 +1,3 @@
-import './util.js';
-import './gallery.js';
+import { startGallery } from './gallery.js';
+
+startGallery();

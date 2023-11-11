@@ -2,21 +2,24 @@ import { getPhotosData } from './data.js';
 import { getRenderedPhotos } from './photosRenderer.js';
 import { showBigPhoto } from './show-photo.js';
 
+function startGallery() {
+  const photos = getPhotosData();
+  const renderedPhotos = getRenderedPhotos(photos);
 
-const photos = getPhotosData();
-const renderedPhotos = getRenderedPhotos(photos);
+  const pictureContainer = document.querySelector('.pictures');
 
-const pictureContainer = document.querySelector('.pictures');
+  pictureContainer.addEventListener('click', (event) => {
+    event.preventDefault();
+    const thumbnail = event.target.closest('[data-photo-id]');
 
-pictureContainer.addEventListener('click', (event) => {
-  const thumbnail = event.target.closest('[data-photo-id]');
-  event.preventDefault();
+    const photoId = thumbnail.dataset.photoId;
 
-  const photoId = thumbnail.dataset.photoId;
+    const currentPhoto = photos.find((photo) => photo.id === photoId);
 
-  const currentPhoto = photos.find((photo) => photo.id === photoId);
+    showBigPhoto(currentPhoto);
+  });
 
-  showBigPhoto(currentPhoto);
-});
+  pictureContainer.appendChild(renderedPhotos);
+}
 
-pictureContainer.appendChild(renderedPhotos);
+export { startGallery };
