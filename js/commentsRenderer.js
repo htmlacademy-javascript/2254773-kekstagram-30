@@ -1,16 +1,16 @@
-const templateComment = document.querySelector('#comment').content;
-const template = templateComment.querySelector('.social__comment');
+const templateCommentElement = document.querySelector('#comment').content;
+const templateElement = templateCommentElement.querySelector('.social__comment');
 
 const getRenderedComments = (comments) => {
   const fragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
-    const commentElement = template.cloneNode(true);
-    const img = commentElement.querySelector('.social__picture');
-    const p = commentElement.querySelector('.social__text');
-    img.src = comment.avatar;
-    img.alt = comment.name;
-    p.textContent = comment.message;
+    const commentElement = templateElement.cloneNode(true);
+    const imgElement = commentElement.querySelector('.social__picture');
+    const pElement = commentElement.querySelector('.social__text');
+    imgElement.src = comment.avatar;
+    imgElement.alt = comment.name;
+    pElement.textContent = comment.message;
 
     fragment.appendChild(commentElement);
   });

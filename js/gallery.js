@@ -6,9 +6,9 @@ function startGallery() {
   const photos = getPhotosData();
   const renderedPhotos = getRenderedPhotos(photos);
 
-  const pictureContainer = document.querySelector('.pictures');
+  const pictureContainerElement = document.querySelector('.pictures');
 
-  pictureContainer.addEventListener('click', (event) => {
+  pictureContainerElement.addEventListener('click', (event) => {
     event.preventDefault();
     const thumbnail = event.target.closest('[data-photo-id]');
 
@@ -19,7 +19,7 @@ function startGallery() {
     showBigPhoto(currentPhoto);
   });
 
-  pictureContainer.appendChild(renderedPhotos);
+  pictureContainerElement.appendChild(renderedPhotos);
 }
 
 export { startGallery };
