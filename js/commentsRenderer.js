@@ -6,11 +6,11 @@ const getRenderedComments = (comments) => {
 
   comments.forEach((comment) => {
     const commentElement = templateElement.cloneNode(true);
-    const imgElement = commentElement.querySelector('.social__picture');
-    const pElement = commentElement.querySelector('.social__text');
-    imgElement.src = comment.avatar;
-    imgElement.alt = comment.name;
-    pElement.textContent = comment.message;
+    const socialPictureElement = commentElement.querySelector('.social__picture');
+    const socialTextElement = commentElement.querySelector('.social__text');
+    socialPictureElement.src = comment.avatar;
+    socialPictureElement.alt = comment.name;
+    socialTextElement.textContent = comment.message;
 
     fragment.appendChild(commentElement);
   });
