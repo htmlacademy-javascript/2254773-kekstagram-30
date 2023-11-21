@@ -1,9 +1,7 @@
-import { getPhotosData } from './data.js';
 import { getRenderedPhotos } from './photosRenderer.js';
 import { showBigPhoto } from './show-photo.js';
 
-function startGallery() {
-  const photos = getPhotosData();
+function startGallery(photos) {
   const renderedPhotos = getRenderedPhotos(photos);
 
   const pictureContainerElement = document.querySelector('.pictures');
@@ -14,7 +12,7 @@ function startGallery() {
 
     const photoId = thumbnail.dataset.photoId;
 
-    const currentPhoto = photos.find((photo) => photo.id === photoId);
+    const currentPhoto = photos.find((photo) => `${photo.id}` === photoId);
 
     showBigPhoto(currentPhoto);
   });
