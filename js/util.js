@@ -1,28 +1,16 @@
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
+const errorLoadPhotoElement = document.querySelector('#data-error').content.querySelector('.data-error');
+const bodyElement = document.querySelector('body');
+
+const REMOVE_MESSAGE_TIMEOUT = 5000;
+
+const showErrorMessage = () => {
+  const errorTextElement = errorLoadPhotoElement.cloneNode(true);
+  bodyElement.append(errorTextElement);
+
+  setTimeout(() => {
+    errorTextElement.remove();
+  }, REMOVE_MESSAGE_TIMEOUT);
 };
-
-const getRandomArrayElement = (items) => items[getRandomInteger(0, items.length - 1)];
-
-const MESSAGE_MAX_UID = 1000000;
-
-function createMessagesUIDsGenerator() {
-  const generatedUIDs = [];
-
-  return () => {
-    let idx;
-    let ifUID = false;
-    while (!ifUID) {
-      idx = getRandomInteger(0, MESSAGE_MAX_UID);
-      ifUID = !generatedUIDs.some((uid) => uid === idx);
-    }
-    generatedUIDs.push(idx);
-    return idx;
-  };
-}
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -32,4 +20,4 @@ const cleanUpChildren = (htmlElement) => {
   });
 };
 
-export { createMessagesUIDsGenerator, getRandomArrayElement, getRandomInteger, isEscapeKey, cleanUpChildren };
+export { isEscapeKey, cleanUpChildren, showErrorMessage };

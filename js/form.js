@@ -1,4 +1,6 @@
+import { sendNewPhoto } from './data.servis.js';
 import { isEscapeKey } from './util.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const imgUploadInputElement = document.querySelector('.img-upload__input');
 const imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
@@ -7,16 +9,16 @@ const imgUploadCancelElement = document.querySelector('.img-upload__cancel');
 const imgUploadFormElement = document.querySelector('.img-upload__form');
 const hashtagInputElement = imgUploadFormElement.querySelector('.text__hashtags');
 const commentInputElement = imgUploadFormElement.querySelector('.text__description');
-
 const scaleControlSmallerElement = imgUploadFormElement.querySelector('.scale__control--smaller');
 const scaleControlBiggerElement = imgUploadFormElement.querySelector('.scale__control--bigger');
 const scaleControlValueElement = imgUploadFormElement.querySelector('.scale__control--value');
 const imgUploadPreviewElement = imgUploadFormElement.querySelector('.img-upload__preview img');
-
 const effectSliderElement = imgUploadFormElement.querySelector('.effect-level__slider');
 const effectLevelValueElement = imgUploadFormElement.querySelector('.effect-level__value');
 const effectsListElement = imgUploadFormElement.querySelector('.effects__list');
 const sliderWrapperElement = imgUploadFormElement.querySelector('.img-upload__effect-level');
+const submitButtonElement = imgUploadFormElement.querySelector('.img-upload__submit');
+
 let pristine;
 let slider;
 
@@ -29,6 +31,20 @@ const SCALE_MIN = 25;
 const SCALE_MAX = 100;
 const SCALE_DEFAULT = 100;
 let currentScale, currentEffect;
+
+const SubmitButtonCaption = {
+  SUBMITING: 'Отправляю...',
+  IDLE: 'Отправить'
+};
+
+const toggleSubmitButton = (isDisabled) => {
+  submitButtonElement.disabled = isDisabled;
+  if (isDisabled) {
+    submitButtonElement.textContent = SubmitButtonCaption.SUBMITING;
+  } else {
+    submitButtonElement.textContent = SubmitButtonCaption.IDLE;
+  }
+};
 
 function stopEscapePropogation(evt) {
   if (isEscapeKey(evt)) {
@@ -92,6 +108,28 @@ function hideSlider() {
   sliderWrapperElement.style.display = 'none';
 }
 
+const submitForm = async (formData) => {
+  if (!pristine.validate()) {
+    return;
+  }
+
+  try {
+    toggleSubmitButton(true);
+    await sendNewPhoto(new FormData(formData));
+    toggleSubmitButton(false);
+    closeForm();
+    showSuccessMessage();
+  } catch {
+    showErrorMessage();
+    toggleSubmitButton(false);
+  }
+};
+
+const submitFormHandler = (evt) => {
+  evt.preventDefault();
+  submitForm(evt.target);
+};
+
 function openForm() {
   currentScale = SCALE_DEFAULT;
   changeImgScale(0);
@@ -100,8 +138,8 @@ function openForm() {
   imgUploadOverlayElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   imgUploadCancelElement.addEventListener('click', closeForm);
-  initFormValidation();
   imgUploadFormElement.addEventListener('submit', submitFormHandler);
+  initFormValidation();
   hashtagInputElement.addEventListener('keydown', stopEscapePropogation);
   commentInputElement.addEventListener('keydown', stopEscapePropogation);
   document.addEventListener('keydown', escapeKeyHandler);
@@ -217,13 +255,6 @@ function closeForm() {
   effectsListElement.removeEventListener('change', effectChangeHandler);
 }
 
-function submitFormHandler(evt) {
-  evt.preventDefault();
-  if (!pristine.validate()) {
-    return false;
-  }
-}
-
 function fullStringLengthValidator(value) {
   return typeof value === 'string' && value.trim().length <= COMMENT_LENGTH_COUNT;
 }
@@ -275,7 +306,6 @@ function initFormValidation() {
   pristine.addValidator(hashtagInputElement, hashtagValidator, 'Введен невалидный хэш-тег');
   pristine.addValidator(hashtagInputElement, dublicateHashtagsValidator, 'Хеш-теги повторяются');
   pristine.addValidator(hashtagInputElement, countHashtagsValidator, 'Превышено количество хеш-тегов');
-
 }
 
 function destroyFormValidation() {
