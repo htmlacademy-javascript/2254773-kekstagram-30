@@ -16,7 +16,8 @@ function startGallery(photos) {
 
     showBigPhoto(currentPhoto);
   });
-
+  const currentPictures = pictureContainerElement.querySelectorAll('.picture');
+  currentPictures.forEach((item) => item.remove());
   pictureContainerElement.appendChild(renderedPhotos);
 }
 

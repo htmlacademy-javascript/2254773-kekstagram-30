@@ -2,6 +2,7 @@ const errorLoadPhotoElement = document.querySelector('#data-error').content.quer
 const bodyElement = document.querySelector('body');
 
 const REMOVE_MESSAGE_TIMEOUT = 5000;
+const DEBOUNCE_DEFAULT_TIMEOUT = 500;
 
 const showErrorMessage = () => {
   const errorTextElement = errorLoadPhotoElement.cloneNode(true);
@@ -20,4 +21,13 @@ const cleanUpChildren = (htmlElement) => {
   });
 };
 
-export { isEscapeKey, cleanUpChildren, showErrorMessage };
+function debounce (callback, timeoutDelay = DEBOUNCE_DEFAULT_TIMEOUT) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export { isEscapeKey, cleanUpChildren, showErrorMessage, debounce };
