@@ -1,4 +1,4 @@
-import { getRenderedComments } from './commentsRenderer.js';
+import { getRenderedComments } from './comments-renderer.js';
 import { cleanUpChildren, isEscapeKey } from './util.js';
 
 const bigPictureElement = document.querySelector('.big-picture');

@@ -1,4 +1,4 @@
-import { sendNewPhoto } from './data.servis.js';
+import { sendNewPhoto } from './data-servis.js';
 import { isEscapeKey } from './util.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
 
@@ -18,10 +18,12 @@ const effectLevelValueElement = imgUploadFormElement.querySelector('.effect-leve
 const effectsListElement = imgUploadFormElement.querySelector('.effects__list');
 const sliderWrapperElement = imgUploadFormElement.querySelector('.img-upload__effect-level');
 const submitButtonElement = imgUploadFormElement.querySelector('.img-upload__submit');
+const effectsPreviewElement = imgUploadFormElement.querySelectorAll('.effects__preview');
 
 let pristine;
 let slider;
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const HASHTAG_REG_EXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const HASHTAG_LENGTH_COUNT = 5;
 const COMMENT_LENGTH_COUNT = 140;
@@ -130,6 +132,20 @@ const submitFormHandler = (evt) => {
   submitForm(evt.target);
 };
 
+const readAndSetImage = () => {
+  const file = imgUploadInputElement.files[0];
+  if (file) {
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+    if (matches) {
+      imgUploadPreviewElement.src = URL.createObjectURL(file);
+    }
+    effectsPreviewElement.forEach((effect) => {
+      effect.style.backgroundImage = `url('${imgUploadPreviewElement.src}')`;
+    });
+  }
+};
+
 function openForm() {
   currentScale = SCALE_DEFAULT;
   changeImgScale(0);
@@ -149,6 +165,7 @@ function openForm() {
   effectsListElement.addEventListener('change', effectChangeHandler);
   imgUploadFormElement.querySelector('#effect-none').checked = true;
   effectChangeHandler();
+  readAndSetImage();
 }
 
 function effectChangeHandler() {
@@ -317,6 +334,7 @@ function initImgUploader() {
     evt.stopPropagation();
   });
   imgUploadInputElement.addEventListener('change', openForm);
+
 }
 
 export { initImgUploader };

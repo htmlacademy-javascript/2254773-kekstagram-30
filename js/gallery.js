@@ -1,4 +1,4 @@
-import { getRenderedPhotos } from './photosRenderer.js';
+import { getRenderedPhotos } from './photos-renderer.js';
 import { showBigPhoto } from './show-photo.js';
 
 function startGallery(photos) {
