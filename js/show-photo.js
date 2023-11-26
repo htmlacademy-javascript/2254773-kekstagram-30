@@ -1,4 +1,4 @@
-import { getRenderedComments } from './commentsRenderer.js';
+import { getRenderedComments } from './comments-renderer.js';
 import { cleanUpChildren, isEscapeKey } from './util.js';
 
 const bigPictureElement = document.querySelector('.big-picture');
@@ -13,26 +13,15 @@ const bodyElement = document.querySelector('body');
 const pictureCancelButtonElement = bigPictureElement.querySelector('.big-picture__cancel');
 const commentTotalCountElement = bigPictureElement.querySelector('.social__comment-total-count');
 
+let currentComments = [];
+let startIndex = 0;
+
 const SHOW_COMMENTS_COUNT = 5;
-let currentComments = [], startIndex = 0;
 
-
-const hideModal = () => {
-  bigPictureElement.classList.add('hidden');
-  commentCountElement.classList.remove('hidden');
-  commentsLoaderElement.classList.remove('hidden');
-  bodyElement.classList.remove('modal-open');
-
-  commentsLoaderElement.removeEventListener('click', renderPartialComments);
-  document.removeEventListener('keydown', escapeKeyHandler);
-  pictureCancelButtonElement.removeEventListener('click', closeClickHandler);
-};
-
-function renderPartialComments() {
-
-  const renderedComments = getRenderedComments(currentComments
+const renderPartialComments = function() {
+  const renderedCommentsElement = getRenderedComments(currentComments
     .slice(startIndex, startIndex + SHOW_COMMENTS_COUNT));
-  commentsContainerElement.appendChild(renderedComments);
+  commentsContainerElement.appendChild(renderedCommentsElement);
   startIndex += SHOW_COMMENTS_COUNT;
   if (startIndex >= currentComments.length) {
     startIndex = currentComments.length;
@@ -40,40 +29,51 @@ function renderPartialComments() {
   }
   commentTotalCountElement.textContent = currentComments.length;
   commentsShownCountElement.textContent = startIndex;
-}
+};
 
-function escapeKeyHandler(evt) {
+const onCommentsLoaderClick = function() {
+  renderPartialComments();
+};
+
+const onDocumentKeydown = function(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     hideModal();
   }
-}
+};
 
-function closeClickHandler(evt) {
+const onCancelButtonClick = function(evt) {
   evt.preventDefault();
   hideModal();
-}
+};
 
-const showModal = () => {
+const showModal = function() {
   bigPictureElement.classList.remove('hidden');
   commentCountElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
-
-  commentsLoaderElement.addEventListener('click', renderPartialComments);
-  pictureCancelButtonElement.addEventListener('click', closeClickHandler);
-  document.addEventListener('keydown', escapeKeyHandler);
+  commentsLoaderElement.addEventListener('click', onCommentsLoaderClick);
+  pictureCancelButtonElement.addEventListener('click', onCancelButtonClick);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const showBigPhoto = (photo) => {
+function hideModal() {
+  bigPictureElement.classList.add('hidden');
+  commentCountElement.classList.remove('hidden');
+  commentsLoaderElement.classList.remove('hidden');
+  bodyElement.classList.remove('modal-open');
+  commentsLoaderElement.removeEventListener('click', onCommentsLoaderClick);
+  document.removeEventListener('keydown', onDocumentKeydown);
+  pictureCancelButtonElement.removeEventListener('click', onCancelButtonClick);
+}
+
+const showBigPhoto = function(photo) {
   imgElement.src = photo.url;
   likesCountElement.textContent = photo.likes;
   commentsShownCountElement.textContent = photo.comments.length;
   descriptionElement.textContent = photo.description;
-
   currentComments = photo.comments;
   startIndex = 0;
   cleanUpChildren(commentsContainerElement);
-
   renderPartialComments();
   showModal();
 };
