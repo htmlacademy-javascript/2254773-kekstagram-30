@@ -1,8 +1,8 @@
-const errorLoadPhotoElement = document.querySelector('#data-error').content.querySelector('.data-error');
-const bodyElement = document.querySelector('body');
-
 const REMOVE_MESSAGE_TIMEOUT = 5000;
 const DEBOUNCE_DEFAULT_TIMEOUT = 500;
+
+const errorLoadPhotoElement = document.querySelector('#data-error').content.querySelector('.data-error');
+const bodyElement = document.querySelector('body');
 
 const showErrorMessage = function () {
   const errorTextElement = errorLoadPhotoElement.cloneNode(true);

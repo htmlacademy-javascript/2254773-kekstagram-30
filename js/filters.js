@@ -1,5 +1,7 @@
-import { startGallery } from './gallery.js';
+import { startGallery, updatePhotos } from './gallery.js';
 import { debounce } from './util.js';
+
+const MAX_RANDOM_FILTER = 10;
 
 const filtersElement = document.querySelector('.img-filters');
 const filtersFormElement = document.querySelector('.img-filters__form');
@@ -7,7 +9,6 @@ const defaultButtonElement = filtersElement.querySelector('#filter-default');
 const randomButtonElement = filtersElement.querySelector('#filter-random');
 const discussedButtonElement = filtersElement.querySelector('#filter-discussed');
 
-const MAX_RANDOM_FILTER = 10;
 const FilterList = {
   DEFAULT: 'default',
   RANDOM: 'random',
@@ -47,7 +48,8 @@ const reactivateFilterButtons = function (evt) {
 
 const repaint = function (filter, data) {
   const filteredPhotos = FilterHandlers[filter](data);
-  startGallery(filteredPhotos);
+  startGallery();
+  updatePhotos(filteredPhotos);
 };
 
 const startFilter = function (data) {

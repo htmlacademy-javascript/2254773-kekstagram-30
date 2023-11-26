@@ -1,6 +1,6 @@
-import { startGallery } from './gallery.js';
+import { startGallery, updatePhotos } from './gallery.js';
 import { initImgUploader } from './form.js';
-import { getPhotosData } from './data-servis.js';
+import { getPhotosData } from './data-service.js';
 import { showErrorMessage } from './util.js';
 import { startFilter } from './filters.js';
 
@@ -9,7 +9,8 @@ const bootstrap = async function () {
 
   try {
     const photos = await getPhotosData();
-    startGallery(photos);
+    startGallery();
+    updatePhotos(photos);
     startFilter(photos);
   } catch (error) {
     showErrorMessage();

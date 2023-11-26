@@ -1,6 +1,8 @@
 import { getRenderedComments } from './comments-renderer.js';
 import { cleanUpChildren, isEscapeKey } from './util.js';
 
+const SHOW_COMMENTS_COUNT = 5;
+
 const bigPictureElement = document.querySelector('.big-picture');
 const imgElement = bigPictureElement.querySelector('.big-picture__img > img');
 const likesCountElement = bigPictureElement.querySelector('.likes-count');
@@ -16,8 +18,6 @@ const commentTotalCountElement = bigPictureElement.querySelector('.social__comme
 let currentComments = [];
 let startIndex = 0;
 
-const SHOW_COMMENTS_COUNT = 5;
-
 const renderPartialComments = function () {
   const renderedCommentsElement = getRenderedComments(currentComments
     .slice(startIndex, startIndex + SHOW_COMMENTS_COUNT));
@@ -27,7 +27,7 @@ const renderPartialComments = function () {
     startIndex = currentComments.length;
     commentsLoaderElement.classList.add('hidden');
   }
-  commentTotalCountElement.textContent = currentComments.length;
+  commentTotalCountElement.textContent = currentComments.length.toString();
   commentsShownCountElement.textContent = startIndex;
 };
 
@@ -69,7 +69,7 @@ function hideModal() {
 const showBigPhoto = function (photo) {
   imgElement.src = photo.url;
   likesCountElement.textContent = photo.likes;
-  commentsShownCountElement.textContent = photo.comments.length;
+  commentsShownCountElement.textContent = photo.comments.length.toString();
   descriptionElement.textContent = photo.description;
   currentComments = photo.comments;
   startIndex = 0;
