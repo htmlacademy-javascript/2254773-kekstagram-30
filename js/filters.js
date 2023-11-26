@@ -2,58 +2,62 @@ import { startGallery } from './gallery.js';
 import { debounce } from './util.js';
 
 const filtersElement = document.querySelector('.img-filters');
-const filterForm = document.querySelector('.img-filters__form');
-const defaultButton = filtersElement.querySelector('#filter-default');
-const randomButton = filtersElement.querySelector('#filter-random');
-const discussedButton = filtersElement.querySelector('#filter-discussed');
+const filtersFormElement = document.querySelector('.img-filters__form');
+const defaultButtonElement = filtersElement.querySelector('#filter-default');
+const randomButtonElement = filtersElement.querySelector('#filter-random');
+const discussedButtonElement = filtersElement.querySelector('#filter-discussed');
 
 const MAX_RANDOM_FILTER = 10;
-
-const filterList = {
+const FilterList = {
   DEFAULT: 'default',
   RANDOM: 'random',
   DISCUSSED: 'discussed'
 };
 
-const getRandomIndex = (min, max) => Math.floor(Math.random() * (max - min));
-
-const filterHandlers = {
-  [filterList.DEFAULT]: (data) => data,
-  [filterList.RANDOM]: (data) => {
-    const randomIndexList = [];
-    const max = Math.min(MAX_RANDOM_FILTER, data.length);
-    while (randomIndexList.length < max) {
-      const index = getRandomIndex(0, data.length - 1);
-      if (!randomIndexList.includes(index)) {
-        randomIndexList.push(index);
-      }
-    }
-    return randomIndexList.map((index) => data[index]);
-  },
-  [filterList.DISCUSSED]: (data) => [...data]
-    .sort((item1, item2) => item2.comments.length - item1.comments.length),
+const getRandomIndex = function(min, max) {
+  return Math.floor(Math.random() * (max - min));
 };
 
-const repaint = (evt, filter, data) => {
-  const filteredPhotos = filterHandlers[filter](data);
+const FilterHandlers = {
+  [FilterList.DEFAULT]: function(data) {
+    return data;
+  },
+  [FilterList.RANDOM]: function(data) {
+    const randomIndexes = [];
+    const max = Math.min(MAX_RANDOM_FILTER, data.length);
+    while (randomIndexes.length < max) {
+      const index = getRandomIndex(0, data.length - 1);
+      if (!randomIndexes.includes(index)) {
+        randomIndexes.push(index);
+      }
+    }
+    return randomIndexes.map((index) => data[index]);
+  },
+  [FilterList.DISCUSSED]: function(data) {
+    return [...data]
+      .sort((item1, item2) => item2.comments.length - item1.comments.length);
+  },
+};
+
+const repaint = function(evt, filter, data) {
+  const filteredPhotos = FilterHandlers[filter](data);
   startGallery(filteredPhotos);
-  const currentActiveElement = filterForm.querySelector('.img-filters__button--active');
+  const currentActiveElement = filtersFormElement.querySelector('.img-filters__button--active');
   currentActiveElement.classList.remove('img-filters__button--active');
   evt.target.classList.add('img-filters__button--active');
 };
 
-const debouncedRepaint = debounce(repaint);
-
-const startFilter = (data) => {
+const startFilter = function(data) {
+  const debouncedRepaint = debounce(repaint);
   filtersElement.classList.remove('img-filters--inactive');
-  defaultButton.addEventListener('click', (evt) => {
-    debouncedRepaint(evt, filterList.DEFAULT, data);
+  defaultButtonElement.addEventListener('click', (evt) => {
+    debouncedRepaint(evt, FilterList.DEFAULT, data);
   });
-  randomButton.addEventListener('click', (evt) => {
-    debouncedRepaint(evt, filterList.RANDOM, data);
+  randomButtonElement.addEventListener('click', (evt) => {
+    debouncedRepaint(evt, FilterList.RANDOM, data);
   });
-  discussedButton.addEventListener('click', (evt) => {
-    debouncedRepaint(evt, filterList.DISCUSSED, data);
+  discussedButtonElement.addEventListener('click', (evt) => {
+    debouncedRepaint(evt, FilterList.DISCUSSED, data);
   });
 };
 

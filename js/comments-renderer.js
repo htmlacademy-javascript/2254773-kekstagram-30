@@ -1,7 +1,7 @@
 const templateCommentElement = document.querySelector('#comment').content;
 const templateElement = templateCommentElement.querySelector('.social__comment');
 
-const getRenderedComments = (comments) => {
+const getRenderedComments = function(comments) {
   const fragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
@@ -11,7 +11,6 @@ const getRenderedComments = (comments) => {
     socialPictureElement.src = comment.avatar;
     socialPictureElement.alt = comment.name;
     socialTextElement.textContent = comment.message;
-
     fragment.appendChild(commentElement);
   });
 
