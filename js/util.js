@@ -4,7 +4,7 @@ const bodyElement = document.querySelector('body');
 const REMOVE_MESSAGE_TIMEOUT = 5000;
 const DEBOUNCE_DEFAULT_TIMEOUT = 500;
 
-const showErrorMessage = function() {
+const showErrorMessage = function () {
   const errorTextElement = errorLoadPhotoElement.cloneNode(true);
   bodyElement.append(errorTextElement);
   setTimeout(() => {
@@ -12,19 +12,19 @@ const showErrorMessage = function() {
   }, REMOVE_MESSAGE_TIMEOUT);
 };
 
-const isEscapeKey = function(evt) {
+const isEscapeKey = function (evt) {
   return evt.key === 'Escape';
 };
 
-const cleanUpChildren = function(htmlElement) {
+const cleanUpChildren = function (htmlElement) {
   Array.from(htmlElement.children).forEach((element) => {
     htmlElement.removeChild(element);
   });
 };
 
-function debounce (callback, timeoutDelay = DEBOUNCE_DEFAULT_TIMEOUT) {
+function debounce(callback, timeoutDelay = DEBOUNCE_DEFAULT_TIMEOUT) {
   let timeoutId;
-  return function(...rest) {
+  return function (...rest) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };

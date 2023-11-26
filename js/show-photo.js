@@ -18,7 +18,7 @@ let startIndex = 0;
 
 const SHOW_COMMENTS_COUNT = 5;
 
-const renderPartialComments = function() {
+const renderPartialComments = function () {
   const renderedCommentsElement = getRenderedComments(currentComments
     .slice(startIndex, startIndex + SHOW_COMMENTS_COUNT));
   commentsContainerElement.appendChild(renderedCommentsElement);
@@ -31,23 +31,23 @@ const renderPartialComments = function() {
   commentsShownCountElement.textContent = startIndex;
 };
 
-const onCommentsLoaderClick = function() {
+const onCommentsLoaderClick = function () {
   renderPartialComments();
 };
 
-const onDocumentKeydown = function(evt) {
+const onDocumentKeydown = function (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     hideModal();
   }
 };
 
-const onCancelButtonClick = function(evt) {
+const onCancelButtonClick = function (evt) {
   evt.preventDefault();
   hideModal();
 };
 
-const showModal = function() {
+const showModal = function () {
   bigPictureElement.classList.remove('hidden');
   commentCountElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
@@ -66,7 +66,7 @@ function hideModal() {
   pictureCancelButtonElement.removeEventListener('click', onCancelButtonClick);
 }
 
-const showBigPhoto = function(photo) {
+const showBigPhoto = function (photo) {
   imgElement.src = photo.url;
   likesCountElement.textContent = photo.likes;
   commentsShownCountElement.textContent = photo.comments.length;

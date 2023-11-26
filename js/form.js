@@ -35,7 +35,7 @@ const SubmitButtonCaption = {
   IDLE: 'Отправить'
 };
 
-const toggleSubmitButton = function(isDisabled) {
+const toggleSubmitButton = function (isDisabled) {
   submitButtonElement.disabled = isDisabled;
   if (isDisabled) {
     submitButtonElement.textContent = SubmitButtonCaption.SUBMITING;
@@ -44,78 +44,85 @@ const toggleSubmitButton = function(isDisabled) {
   }
 };
 
-const stopEscapePropogation = function(evt) {
+const stopEscapePropogation = function (evt) {
   if (isEscapeKey(evt)) {
     evt.stopPropagation();
   }
 };
 
-const onHashtagKeydown = function(evt) {
+const onHashtagKeydown = function (evt) {
   stopEscapePropogation(evt);
 };
 
-const onCommentKeydown = function(evt) {
+const onCommentKeydown = function (evt) {
   stopEscapePropogation(evt);
 };
 
 
-const onDocumentKeydown = function(evt) {
+const onDocumentKeydown = function (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeForm();
   }
 };
 
-const destroyEffectSlider = function() {
-  slider.destroy();
-};
-
-const hideSlider = function() {
+const hideSlider = function () {
   sliderWrapperElement.style.display = 'none';
 };
 
-const initEffectSlider = function() {
-  slider = noUiSlider.create(effectSliderElement, {
-    range: {
-      min: 0,
-      max: 100,
-    },
-    start: 100,
-    step: 1,
-    connect: 'lower',
-  });
+const initEffectSlider = function () {
+  if (!slider) {
+    slider = noUiSlider.create(effectSliderElement, {
+      range: {
+        min: 0,
+        max: 100,
+      },
+      start: 100,
+      step: 1,
+      connect: 'lower',
+    });
+    slider.on('update', () => {
+      const sliderValue = slider.get();
+      let filterValue = null;
+      effectLevelValueElement.value = Number(sliderValue);
+      switch (currentEffect) {
+        case 'chrome':
+          filterValue = `grayscale(${sliderValue})`;
+          break;
+        case 'sepia':
+          filterValue = `sepia(${sliderValue})`;
+          break;
+        case 'marvin':
+          filterValue = `invert(${sliderValue}%)`;
+          break;
+        case 'phobos':
+          filterValue = `blur(${sliderValue}px)`;
+          break;
+        case 'heat':
+          filterValue = `brightness(${sliderValue})`;
+          break;
+        default:
+      }
+      imgUploadPreviewElement.style.filter = filterValue;
+    });
+  } else {
+    slider.updateOptions({
+      range: {
+        min: 0,
+        max: 100,
+      },
+      start: 100,
+      step: 1,
+    });
+  }
   hideSlider();
-  slider.on('update', () => {
-    const sliderValue = slider.get();
-    let filterValue = null;
-    effectLevelValueElement.value = sliderValue;
-    switch (currentEffect) {
-      case 'chrome':
-        filterValue = `grayscale(${sliderValue})`;
-        break;
-      case 'sepia':
-        filterValue = `sepia(${sliderValue})`;
-        break;
-      case 'marvin':
-        filterValue = `invert(${sliderValue}%)`;
-        break;
-      case 'phobos':
-        filterValue = `blur(${sliderValue}px)`;
-        break;
-      case 'heat':
-        filterValue = `brightness(${sliderValue})`;
-        break;
-      default:
-    }
-    imgUploadPreviewElement.style.filter = filterValue;
-  });
 };
 
-const showSlider = function() {
+const showSlider = function () {
   sliderWrapperElement.style.display = 'block';
 };
 
-const submitForm = async function(formData) {
+const submitForm = async function (formData) {
   if (!pristine.validate()) {
     return;
   }
@@ -132,12 +139,12 @@ const submitForm = async function(formData) {
   }
 };
 
-const onFormSubmit = function(evt) {
+const onFormSubmit = function (evt) {
   evt.preventDefault();
   submitForm(evt.target);
 };
 
-const readAndSetImage = function() {
+const readAndSetImage = function () {
   const file = imgUploadInputElement.files[0];
   if (file) {
     const fileName = file.name.toLowerCase();
@@ -151,7 +158,7 @@ const readAndSetImage = function() {
   }
 };
 
-const changeImgScale = function(scaleFactor) {
+const changeImgScale = function (scaleFactor) {
   const newScale = currentScale + scaleFactor;
   if (newScale < SCALE_MIN || newScale > SCALE_MAX) {
     return false;
@@ -161,19 +168,19 @@ const changeImgScale = function(scaleFactor) {
   imgUploadPreviewElement.style.transform = `scale(${currentScale / 100})`;
 };
 
-const onScaleSmallerClick = function() {
+const onScaleSmallerClick = function () {
   changeImgScale(-SCALE_STEP_COUNT);
 };
 
-const onScaleBiggerClick = function() {
+const onScaleBiggerClick = function () {
   changeImgScale(+SCALE_STEP_COUNT);
 };
 
-const onUploadCancelClick = function() {
+const onUploadCancelClick = function () {
   closeForm();
 };
 
-const onEffectChange = function() {
+const onEffectChange = function () {
   const imgUploadFormData = new FormData(imgUploadFormElement);
   currentEffect = imgUploadFormData.get('effect');
   switch (currentEffect) {
@@ -245,11 +252,11 @@ const onEffectChange = function() {
   }
 };
 
-const fullStringLengthValidator = function(value) {
+const fullStringLengthValidator = function (value) {
   return typeof value === 'string' && value.trim().length <= COMMENT_LENGTH_COUNT;
 };
 
-const hashtagValidator = function(value) {
+const hashtagValidator = function (value) {
   if (typeof value === 'string') {
     const hashtags = value
       .split(' ')
@@ -261,7 +268,7 @@ const hashtagValidator = function(value) {
   return false;
 };
 
-const dublicateHashtagsValidator = function(value) {
+const dublicateHashtagsValidator = function (value) {
   const hashtags = value
     .toLowerCase()
     .split(' ')
@@ -277,14 +284,14 @@ const dublicateHashtagsValidator = function(value) {
   return result;
 };
 
-const countHashtagsValidator = function(value) {
+const countHashtagsValidator = function (value) {
   const hashtags = value
     .split(' ')
     .filter((hashtag) => Boolean(hashtag));
   return hashtags.length <= HASHTAG_LENGTH_COUNT;
 };
 
-const initFormValidation = function() {
+const initFormValidation = function () {
   pristine = new Pristine(imgUploadFormElement, {
     classTo: 'img-upload__field-wrapper',
     errorTextParent: 'img-upload__field-wrapper',
@@ -297,11 +304,11 @@ const initFormValidation = function() {
   pristine.addValidator(hashtagInputElement, countHashtagsValidator, 'Превышено количество хеш-тегов');
 };
 
-const destroyFormValidation = function() {
+const destroyFormValidation = function () {
   pristine.destroy();
 };
 
-const openForm = function() {
+const openForm = function () {
   currentScale = SCALE_DEFAULT;
   changeImgScale(0);
   hashtagInputElement.value = '';
@@ -335,11 +342,10 @@ function closeForm() {
   document.removeEventListener('keydown', onDocumentKeydown);
   scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
   scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
-  destroyEffectSlider();
   effectsListElement.removeEventListener('change', onEffectChange);
 }
 
-const initImgUploader = function() {
+const initImgUploader = function () {
   imgUploadFormElement.addEventListener('click', (evt) => {
     evt.stopPropagation();
   });

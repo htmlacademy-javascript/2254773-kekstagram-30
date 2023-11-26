@@ -1,7 +1,7 @@
 import { getRenderedPhotos } from './photos-renderer.js';
 import { showBigPhoto } from './show-photo.js';
 
-const startGallery = function(photos) {
+const startGallery = function (photos) {
   const renderedPhotos = getRenderedPhotos(photos);
   const pictureContainerElement = document.querySelector('.pictures');
   const currentPicturesElements = pictureContainerElement.querySelectorAll('.picture');

@@ -1,7 +1,7 @@
 const templateCommentElement = document.querySelector('#comment').content;
 const templateElement = templateCommentElement.querySelector('.social__comment');
 
-const getRenderedComments = function(comments) {
+const getRenderedComments = function (comments) {
   const fragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
