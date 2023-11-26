@@ -39,18 +39,18 @@ const FilterHandlers = {
   },
 };
 
-const reactivateFilterButtons = function(evt) {
+const reactivateFilterButtons = function (evt) {
   const currentActiveElement = filtersFormElement.querySelector('.img-filters__button--active');
   currentActiveElement.classList.remove('img-filters__button--active');
   evt.target.classList.add('img-filters__button--active');
 };
 
-const repaint = function(filter, data) {
+const repaint = function (filter, data) {
   const filteredPhotos = FilterHandlers[filter](data);
   startGallery(filteredPhotos);
 };
 
-const startFilter = function(data) {
+const startFilter = function (data) {
   const debouncedRepaint = debounce(repaint);
   filtersElement.classList.remove('img-filters--inactive');
   defaultButtonElement.addEventListener('click', (evt) => {

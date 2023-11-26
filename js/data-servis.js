@@ -12,7 +12,7 @@ const ErrorText = {
   [Method.POST]: 'Ошибка загрузки файла',
 };
 
-const fetchData = async function(url, method = Method.GET, body = null) {
+const fetchData = async function (url, method = Method.GET, body = null) {
   const response = await fetch(url, { method, body });
   if (!response.ok) {
     throw new Error(ErrorText[method]);
@@ -21,11 +21,11 @@ const fetchData = async function(url, method = Method.GET, body = null) {
   return response.json();
 };
 
-const getPhotosData = async function() {
+const getPhotosData = async function () {
   return fetchData(URL + Route.GET_DATA);
 };
 
-const sendNewPhoto = async function(formData) {
+const sendNewPhoto = async function (formData) {
   return fetchData(URL + Route.SEND_DATA, Method.POST, formData);
 };
 

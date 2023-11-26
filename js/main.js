@@ -4,7 +4,7 @@ import { getPhotosData } from './data-servis.js';
 import { showErrorMessage } from './util.js';
 import { startFilter } from './filters.js';
 
-const bootstrap = async function() {
+const bootstrap = async function () {
   initImgUploader();
 
   try {
