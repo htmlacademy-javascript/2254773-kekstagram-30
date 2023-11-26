@@ -1,6 +1,15 @@
-import { sendNewPhoto } from './data-servis.js';
+import { sendNewPhoto } from './data-service.js';
 import { isEscapeKey } from './util.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
+
+const HASHTAG_LENGTH_COUNT = 5;
+const COMMENT_LENGTH_COUNT = 140;
+const SCALE_STEP_COUNT = 25;
+const SCALE_MIN = 25;
+const SCALE_MAX = 100;
+const SCALE_DEFAULT = 100;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const HASHTAG_REG_EXP = /^#[a-zа-яё0-9]{1,19}$/i;
 
 const imgUploadInputElement = document.querySelector('.img-upload__input');
 const imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
@@ -22,40 +31,32 @@ const effectsPreviewElement = imgUploadFormElement.querySelectorAll('.effects__p
 
 let currentScale, currentEffect, pristine, slider;
 
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-const HASHTAG_REG_EXP = /^#[a-zа-яё0-9]{1,19}$/i;
-const HASHTAG_LENGTH_COUNT = 5;
-const COMMENT_LENGTH_COUNT = 140;
-const SCALE_STEP_COUNT = 25;
-const SCALE_MIN = 25;
-const SCALE_MAX = 100;
-const SCALE_DEFAULT = 100;
 const SubmitButtonCaption = {
-  SUBMITING: 'Отправляю...',
+  SUBMITTING: 'Отправляю...',
   IDLE: 'Отправить'
 };
 
 const toggleSubmitButton = function (isDisabled) {
   submitButtonElement.disabled = isDisabled;
   if (isDisabled) {
-    submitButtonElement.textContent = SubmitButtonCaption.SUBMITING;
+    submitButtonElement.textContent = SubmitButtonCaption.SUBMITTING;
   } else {
     submitButtonElement.textContent = SubmitButtonCaption.IDLE;
   }
 };
 
-const stopEscapePropogation = function (evt) {
+const stopEscapePropagation = function (evt) {
   if (isEscapeKey(evt)) {
     evt.stopPropagation();
   }
 };
 
 const onHashtagKeydown = function (evt) {
-  stopEscapePropogation(evt);
+  stopEscapePropagation(evt);
 };
 
 const onCommentKeydown = function (evt) {
-  stopEscapePropogation(evt);
+  stopEscapePropagation(evt);
 };
 
 
@@ -261,19 +262,18 @@ const hashtagValidator = function (value) {
     const hashtags = value
       .split(' ')
       .filter((hashtag) => Boolean(hashtag));
-    const result = hashtags.every((hashtag) => hashtag.match(HASHTAG_REG_EXP)) ||
+    return hashtags.every((hashtag) => hashtag.match(HASHTAG_REG_EXP)) ||
       value === '';
-    return result;
   }
   return false;
 };
 
-const dublicateHashtagsValidator = function (value) {
+const duplicateHashtagsValidator = function (value) {
   const hashtags = value
     .toLowerCase()
     .split(' ')
     .filter((hashtag) => Boolean(hashtag));
-  const result = hashtags.every((hashtag, index, array) => {
+  return hashtags.every((hashtag, index, array) => {
     for (let i = index + 1; i < array.length; i++) {
       if (hashtag === array[i]) {
         return false;
@@ -281,7 +281,6 @@ const dublicateHashtagsValidator = function (value) {
     }
     return true;
   }) || value === '';
-  return result;
 };
 
 const countHashtagsValidator = function (value) {
@@ -300,7 +299,7 @@ const initFormValidation = function () {
 
   pristine.addValidator(commentInputElement, fullStringLengthValidator, 'Длина комментария больше 140 символов');
   pristine.addValidator(hashtagInputElement, hashtagValidator, 'Введен невалидный хэш-тег');
-  pristine.addValidator(hashtagInputElement, dublicateHashtagsValidator, 'Хеш-теги повторяются');
+  pristine.addValidator(hashtagInputElement, duplicateHashtagsValidator, 'Хеш-теги повторяются');
   pristine.addValidator(hashtagInputElement, countHashtagsValidator, 'Превышено количество хеш-тегов');
 };
 
